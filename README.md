@@ -1,39 +1,39 @@
-# Minesweeper AI
+# Degrees of Separation
 
-This repository contains an implementation of an AI player for the game of Minesweeper. The AI uses logical reasoning and inference to make educated guesses about the locations of mines in the game board.
+This repository contains a Python program that calculates the degrees of separation between two actors or actresses based on the movies they have starred in. It uses a simple graph search algorithm to find the shortest path connecting the two individuals through shared movie appearances.
 
 ## How to Run
 
-To run the Minesweeper AI, you will need to have Python installed on your system. Clone this repository and navigate to the project directory. Then, run the following command:
+To run the Movie Degrees of Separation program, you will need to have Python installed on your system. Clone this repository and navigate to the project directory. Then, run the following command:
 
 ```
-python runner.py
+python degrees.py [directory]
 ```
 
-This will start the Minesweeper game with the AI player. You can interact with the game by clicking on cells to reveal them or right-clicking to flag them as mines. The AI player can be activated by clicking the "AI Move" button.
+The optional `[directory]` argument specifies the data directory containing the CSV files for people, movies, and stars. If not provided, the program will use the "large" directory by default.
+
+You will be prompted to enter the names of the two actors or actresses for which you want to calculate the degrees of separation. The program will then display the result if a connection is found.
 
 ## Files
 
-- `runner.py`: This is the main file that runs the Minesweeper game with the AI player. It contains the game loop and the GUI code using the Pygame library.
+- `degrees.py`: This is the main Python file that contains the implementation of the degrees of separation algorithm. It loads the data from CSV files, performs the graph search, and displays the result.
 
-- `minesweeper.py`: This file defines the `Minesweeper` class, which represents the game board and provides functions to interact with the board, such as revealing cells and counting nearby mines. It also defines the `Sentence` class, which represents a logical statement about the game and is used by the AI player to reason about the board.
+- `util.py`: This file defines utility classes used in the graph search algorithm, including the `Node` class for representing nodes in the search and the `StackFrontier` and `QueueFrontier` classes for managing the search frontier.
 
 ## Dependencies
 
-The Minesweeper AI requires the Pygame library to be installed. You can install it using pip:
-
-```
-pip install pygame
-```
+There are no external dependencies required to run this program.
 
 ## How the AI Works
 
-The Minesweeper AI uses logical reasoning to make educated guesses about the locations of mines in the game board. It maintains a knowledge base, which consists of logical statements (sentences) about the game. Each sentence represents a set of cells and the count of nearby mines. The AI uses these sentences to infer new information about the board.
+The Movie Degrees of Separation program uses a graph search algorithm to find the shortest path between two actors or actresses through shared movie appearances. It builds a graph where each node represents a person, and each edge represents a shared movie appearance. The program then performs a breadth-first search or depth-first search on this graph to find the shortest path between the source and target nodes.
 
-When the AI makes a move, it first checks if there are any cells that are known to be safe or mines based on the current knowledge base. If so, it selects one of those cells as the move. Otherwise, it applies logical inference to make a move. It iterates over each sentence in the knowledge base and checks for two types of inferences:
+1. Loading Data: The program first loads the data from CSV files into memory. It creates dictionaries to map person names to person IDs, person IDs to person information (name, birth, movies), and movie IDs to movie information (title, year, stars).
 
-1. Known Mines: If the count of nearby mines in a sentence is equal to the number of cells in the sentence, all cells in the sentence are known to be mines.
+2. Finding Degrees of Separation: When the user enters the names of the source and target actors or actresses, the program retrieves their corresponding person IDs from the loaded data. If either person is not found, the program exits with an error message.
 
-2. Known Safes: If the count of nearby mines in a sentence is zero, all cells in the sentence are known to be safe.
+3. Graph Search: The program uses either a breadth-first search or depth-first search to explore the graph and find the shortest path between the source and target nodes. It creates a node for the source person and adds it to the search frontier. The search frontier is implemented using a stack (for DFS) or a queue (for BFS).
 
-The AI continues making moves and updating its knowledge base until it either wins the game (flags all mines) or determines that it cannot make any more safe moves.
+4. Exploring Neighbors: The program explores each person's neighbors (i.e., people who starred in the same movies) and adds them to the search frontier if they have not been explored yet.
+
+5. Backtracking Solution: Once the target person is found during the graph search, the program backtracks the path from the target node to the source node to reconstruct the shortest path. It then prints the number of degrees of separation and the sequence of movie connections between the two individuals.
